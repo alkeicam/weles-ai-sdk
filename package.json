@@ -1,6 +1,14 @@
 {
   "name": "weles-ai-sdk",
   "version": "1.0.2",
+  "homepage": "https://github.com/alkeicam/weles-ai-sdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alkeicam/weles-ai-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alkeicam/weles-ai-sdk/issues"
+  },
   "description": "The official TypeScript library for the Weles AI API",
   "main": "dist/weles-sdk.umd.js",
   "types": "dist/weles-sdk.d.ts",
