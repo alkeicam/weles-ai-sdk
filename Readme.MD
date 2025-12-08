@@ -80,7 +80,7 @@ console.log(reverseEngineeringWorkItem);
 ### Retrieving documents
 <!-- prettier-ignore -->
 ```ts
-import {WelesAI} from "../src/weles-sdk"
+import {WelesAI} from "weles-ai-sdk"
 
 const client = new WelesAI({
     apiKey: process.env.WELES_AI_API_KEY // This is the default and can be omitted

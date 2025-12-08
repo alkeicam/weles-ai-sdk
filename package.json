@@ -13,6 +13,7 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/weles-sdk.d.ts",
       "require": "./dist/weles-sdk.umd.min.js",
       "import": "./dist/weles-sdk.esm.min.js"
     }
