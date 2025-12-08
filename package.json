@@ -1,6 +1,6 @@
 {
   "name": "weles-ai-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The official TypeScript library for the Weles AI API",
   "main": "dist/weles-sdk.umd.js",
   "types": "dist/weles-sdk.d.ts",
