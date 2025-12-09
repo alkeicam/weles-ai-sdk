@@ -340,7 +340,66 @@ describe("Weles AI Typescript SDK",()=>{
             expect(workItemStatus).toEqual({
                 id: id,
                 status: requestResponse.status,
-                fileName: requestResponse.deliverables[0].filename
+                fileName: requestResponse.meta?.deliverables[0].filename
+            })
+
+        })
+        it("retrieves document status - backward compatibility",async ()=>{
+
+            const id = "id15";
+
+            const requestResponse:any = {
+                id: id,
+                status: "DONE", 
+                meta: {
+                    deliverables: [{
+                        fileName: "MyFile-Result.md"
+                    }]
+                }               
+                
+            }
+
+            const data = {
+                id: id
+            }
+
+            const theSpy = jest.spyOn(WelesAI.prototype, "_fetch");
+            theSpy.mockResolvedValue({
+                ok: true,
+                json: async ()=>{
+                    return [requestResponse]
+                }
+            } as Response)
+
+
+            const client = new WelesAI({
+                apiKey: "somekey"            
+            });
+
+            
+            
+            const workItemStatus = await client.generate.status(data);       
+            
+            const firstArg = theSpy.mock.calls[0];
+            const parsed = JSON.parse((<any>firstArg[1]).body);
+
+            expect(theSpy).toHaveBeenCalledWith(
+                expect.stringContaining("/plugins/weles-ai/inference/list"),
+                expect.anything()
+            );
+
+            expect(parsed).toEqual(
+                expect.objectContaining({
+                    ids: expect.arrayContaining([
+                        id
+                    ])
+                })
+            )
+
+            expect(workItemStatus).toEqual({
+                id: id,
+                status: requestResponse.status,
+                fileName: requestResponse.meta?.deliverables[0].fileName
             })
 
         })
@@ -390,7 +449,7 @@ describe("Weles AI Typescript SDK",()=>{
                     fileName: filename
                 })
             )            
-        })
+        })        
     })    
     describe("document listings",()=>{
         it("lists documents using provided criteria",async ()=>{
@@ -401,17 +460,23 @@ describe("Weles AI Typescript SDK",()=>{
             const requestResponses:any =[
                 {
                     id: id,
-                    status: "DONE",                
-                    deliverables: [{
-                        filename: "MyFile.md"
-                    }]
+                    status: "DONE", 
+                    meta: {
+                        deliverables: [{
+                            filename: "MyFile.md"
+                        }]
+                    }
+                    
                 },
                 {
                     id: id2,
                     status: "PROCESSING",                
-                    deliverables: [{
-                        filename: "SecondFile.md"
-                    }]
+                    meta: {
+                        deliverables: [{
+                            fileName: "SecondFile.md"
+                        }]
+                    }
+                    
                 }
             ]
 
@@ -450,12 +515,12 @@ describe("Weles AI Typescript SDK",()=>{
                 {
                     id: id,
                     status: requestResponses[0].status,
-                    fileName: requestResponses[0].deliverables[0].filename
+                    fileName: requestResponses[0].meta.deliverables[0].filename
                 },
                 {
                     id: id2,
                     status: requestResponses[1].status,
-                    fileName: requestResponses[1].deliverables[0].filename
+                    fileName: requestResponses[1].meta.deliverables[0].fileName
                 }
             ])
         })

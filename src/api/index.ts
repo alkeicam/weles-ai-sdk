@@ -115,7 +115,7 @@ export class Documents{
         return {
             id: workItem.id,
             status: workItem.status,
-            fileName: workItem.deliverables[0].filename
+            fileName: workItem.meta?.deliverables[0]?.filename || workItem.meta?.deliverables[0]?.fileName
         }
     }
 
@@ -141,7 +141,7 @@ export class Documents{
             return {
                 id: item.id,
                 status: item.status,
-                fileName: item.deliverables[0].filename
+                fileName: item.meta?.deliverables[0]?.filename || item.meta?.deliverables[0]?.fileName
             }
         })        
     }
