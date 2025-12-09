@@ -161,8 +161,14 @@ cat > stories.json <<'EOF'
 [{"name":"Issue TICKET-107","protocol":"JIRA_TICKET","remoteURI":"https://<domain>.atlassian.net/browse/TICKET-107"}]
 EOF
 
-weles-ai hld --context context.json --destination destination.json --stories stories.json
+cat > remotes.json <<'EOF'
+[{"id":"shared-azure","name":"Shared Azure workspace","baseURI":"https://myaccount.blob.core.windows.net/mycontainer","credentials":{"token":"<bearer-or-password>"}}]
+EOF
+
+weles-ai hld --context context.json --destination destination.json --stories stories.json --remotes remotes.json
 ```
+
+`remotes` is optional; `credentials.token` can hold a bearer token or password for the remote store.
 
 ### Generate Reverse Engineering Report
 
@@ -171,7 +177,7 @@ cat > codes.json <<'EOF'
 [{"name":"My module","protocol":"GIT_CODE","remoteURI":"https://<my-git-repo>.git","branch":"main"}]
 EOF
 
-weles-ai reverse --context context.json --destination destination.json --codes codes.json
+weles-ai reverse --context context.json --destination destination.json --codes codes.json --remotes remotes.json
 ```
 
 ### Check, retrieve, and list
