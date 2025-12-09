@@ -187,3 +187,20 @@ weles-ai status --id <workItemId>
 weles-ai retrieve --id <workItemId> --file-name "<file name from status/list>"
 weles-ai list --filters filters.json   # filters is optional; omit to list all
 ```
+
+
+## Contributing ❤️
+
+We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- Development setup and environment
+- Testing and code quality standards
+- Pull request process
+- Security issue reporting
+
+
+## ⚠️ Preview Status
+
+Weles AI is currently in public preview. During this period:
+- APIs may change as we refine the SDK
+- We welcome feedback and contributions
