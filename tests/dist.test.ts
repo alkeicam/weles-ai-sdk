@@ -35,6 +35,7 @@ describe("Weles AI Typescript SDK",()=>{
                 },
                 stories: [
                     {
+                        id: "XXX-100",
                         name: "Issue XXX-100",
                         protocol: "JIRA_TICKET",
                         remoteURI: "https://mydomain/browse/XXX-100"                        
@@ -78,6 +79,43 @@ describe("Weles AI Typescript SDK",()=>{
 
             
         })
+        it("requires story id for High Level Design document", async () => {        
+            const theSpy = jest.spyOn(WelesAI.prototype, "_fetch");
+            theSpy.mockResolvedValue({
+                ok: true,
+                json: async ()=>{}
+            } as Response)
+
+
+            const client = new WelesAI({
+                apiKey: "somekey"            
+            });
+
+            const data:any = {
+                context: {
+                    projectId: "PROJECT1",
+                    releaseId: "v1.0.0",
+                    incrementNo: 1
+                },
+                destination: {
+                    name: "My Document",
+                    protocol: "FILE"
+                },
+                stories: [
+                    {
+                        id: "",
+                        name: "Issue XXX-100",
+                        protocol: "JIRA_TICKET",
+                        remoteURI: "https://mydomain/browse/XXX-100"                        
+                    } as Story
+                ],
+                remotes: []
+            }
+            
+            await expect(client.generate.highLevelDesignArchitecture(data)).rejects.toThrow("Each story needs an id.");
+            expect(theSpy).not.toHaveBeenCalled();    
+            
+        })
         it("generates High Level Design document with story from file",async ()=>{        
             const theSpy = jest.spyOn(WelesAI.prototype, "_fetch");
             theSpy.mockResolvedValue({
@@ -102,6 +140,7 @@ describe("Weles AI Typescript SDK",()=>{
                 },
                 stories: [
                     {
+                        id: "XXX-100",
                         name: "Issue XXX-100",
                         protocol: "FILE",
                         dataURL: "<somedataurl>",
@@ -525,79 +564,4 @@ describe("Weles AI Typescript SDK",()=>{
             ])
         })
     }) 
-})
-
-
-
-describe("Weles AI Typescript SDK Integration Tests",()=>{
-
-    xit("generate High Level Design document",async ()=>{
-        const client = new WelesAI({
-            apiKey: process.env.TEST_API_KEY,
-            sslMode: "relaxed",
-            baseURL: process.env.TEST_ENDPOINT
-        });
-        try{
-            const createdWorkItem = await client.generate.highLevelDesignArchitecture({
-                context: {
-                    projectId: "EXEFPF1KIK",
-                    releaseId: "v1.0.10",
-                    incrementNo: 1
-                },
-                destination: {
-                    name: "SDK File Test #1 - EXEFPF2KIK-107",
-                    protocol: "FILE"
-                },
-                stories: [
-                    {
-                        name: "Issue EXEFPF2KIK-107",
-                        protocol: "JIRA_TICKET",
-                        remoteURI: "https://execon.atlassian.net/browse/EXEFPF2KIK-107"                        
-                    } as Story
-                ],
-                remotes: []
-            });
-            
-            console.log(createdWorkItem);
-            
-        }catch(error){
-            console.log("error", error);
-        }
-        
-    })
-
-    xit("generate reverse engineer report",async ()=>{
-        const client = new WelesAI({
-            apiKey: "67EhDOk5k5ihVnpi",
-            sslMode: "relaxed",
-            baseURL: "https://localhost:7990"
-        });
-        try{
-            const createdWorkItem = await client.generate.reverseEngineerReport({
-                destination: {
-                    name: "SDK File Test #1 - EXEFPF2KIK-107",
-                    protocol: "FILE"
-                },
-                context: {
-                    projectId: "EXEFPF1KIK",
-                    releaseId: "v1.0.10",
-                    incrementNo: 1
-                },
-                codes: [
-                    {
-                        name: "Commons module",
-                        protocol: "GIT_CODE",
-                        remoteURI: "https://gitlab.execon.pl/execon/weles-ai/welesai-commons.git",
-                        branch: "main"
-                    }as GitCode
-                ],
-                remotes: []
-            });            
-            console.log(createdWorkItem);            
-        }catch(error){
-            console.log("error", error);
-        }
-        
-    })
-    
 })

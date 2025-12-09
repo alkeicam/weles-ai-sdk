@@ -16,6 +16,9 @@ export class Documents{
      * @param stories 
      */
     async highLevelDesignArchitecture(request:HLDRequest){
+        // verify that each story has id provided
+        if(!request.stories.every((item)=>item.id))
+            throw new Error(`Each story needs an id.`);
         const data = {
             ...request.context,
             product: "HLD",            

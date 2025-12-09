@@ -47,6 +47,7 @@ export interface DocumentsListRequest{
 }
 
 export interface Story{
+    id: string,
     name: string,     
 }
 
