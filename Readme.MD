@@ -133,26 +133,51 @@ const sourceCode = {
 
 ## Command line usage
 
-A non-interactive CLI is available as `weles-ai` (added to your PATH when the package is installed). It reads `WELES_AI_API_KEY`, `WELES_AI_BASE_URL`, and `WELES_AI_SSL_MODE` from the environment or accepts them via flags.
+The package ships a non-interactive CLI as `weles-ai` (available after install or via `npx weles-ai`). It reads `WELES_AI_API_KEY` (required), `WELES_AI_BASE_URL`, and `WELES_AI_SSL_MODE` from the environment; each can be overridden with `--api-key`, `--base-url`, and `--ssl-mode`.
 
-General syntax:
+### CLI installation
+
+- Project-local (recommended): `npm install --save-dev weles-ai-sdk` then run with `npx weles-ai ...`
+- Global: `npm install -g weles-ai-sdk` then run `weles-ai ...`
 
 ```
-weles-ai <command> [--api-key <key>] [--base-url <url>] [--ssl-mode <mode>] ...
+weles-ai <command> [--api-key <key>] [--base-url <url>] [--ssl-mode <mode>]
 ```
 
-Commands expect JSON payloads either inline or via a path to a JSON file:
+Run `weles-ai help` to see all commands. Key flows are shown below; every JSON flag accepts either inline JSON or a path to a JSON file.
 
-- Generate HLD:
-  ```
-  weles-ai hld --context context.json --destination destination.json --stories stories.json [--remotes remotes.json]
-  ```
-- Reverse engineering:
-  ```
-  weles-ai reverse --context context.json --destination destination.json --codes codes.json [--remotes remotes.json]
-  ```
-- Check status: `weles-ai status --id <workItemId>`
-- Retrieve deliverable: `weles-ai retrieve --id <workItemId> --file-name "<file name from status/list>"`
-- List items (with optional filters JSON): `weles-ai list --filters filters.json`
+### Generate High Level Design
 
-Use `weles-ai help` to see all options.
+```sh
+cat > context.json <<'EOF'
+{"projectId":"MY-PROJECT","releaseId":"v1.0.0","incrementNo":1}
+EOF
+
+cat > destination.json <<'EOF'
+{"name":"Architecture Document","protocol":"FILE"}
+EOF
+
+cat > stories.json <<'EOF'
+[{"name":"Issue TICKET-107","protocol":"JIRA_TICKET","remoteURI":"https://<domain>.atlassian.net/browse/TICKET-107"}]
+EOF
+
+weles-ai hld --context context.json --destination destination.json --stories stories.json
+```
+
+### Generate Reverse Engineering Report
+
+```sh
+cat > codes.json <<'EOF'
+[{"name":"My module","protocol":"GIT_CODE","remoteURI":"https://<my-git-repo>.git","branch":"main"}]
+EOF
+
+weles-ai reverse --context context.json --destination destination.json --codes codes.json
+```
+
+### Check, retrieve, and list
+
+```sh
+weles-ai status --id <workItemId>
+weles-ai retrieve --id <workItemId> --file-name "<file name from status/list>"
+weles-ai list --filters filters.json   # filters is optional; omit to list all
+```
