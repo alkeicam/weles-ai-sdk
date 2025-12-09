@@ -130,3 +130,29 @@ const sourceCode = {
     dataURL: sourceDataURL    
 }
 ```
+
+## Command line usage
+
+A non-interactive CLI is available as `weles-ai` (added to your PATH when the package is installed). It reads `WELES_AI_API_KEY`, `WELES_AI_BASE_URL`, and `WELES_AI_SSL_MODE` from the environment or accepts them via flags.
+
+General syntax:
+
+```
+weles-ai <command> [--api-key <key>] [--base-url <url>] [--ssl-mode <mode>] ...
+```
+
+Commands expect JSON payloads either inline or via a path to a JSON file:
+
+- Generate HLD:
+  ```
+  weles-ai hld --context context.json --destination destination.json --stories stories.json [--remotes remotes.json]
+  ```
+- Reverse engineering:
+  ```
+  weles-ai reverse --context context.json --destination destination.json --codes codes.json [--remotes remotes.json]
+  ```
+- Check status: `weles-ai status --id <workItemId>`
+- Retrieve deliverable: `weles-ai retrieve --id <workItemId> --file-name "<file name from status/list>"`
+- List items (with optional filters JSON): `weles-ai list --filters filters.json`
+
+Use `weles-ai help` to see all options.

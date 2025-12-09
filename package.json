@@ -13,6 +13,9 @@
   "main": "dist/weles-sdk.umd.js",
   "types": "dist/weles-sdk.d.ts",
   "module": "dist/weles-sdk.esm.min.js",
+  "bin": {
+    "weles-ai": "dist/weles-ai-cli.js"
+  },
   "keywords": [
     "ai",
     "architect",
